@@ -1,0 +1,11 @@
+# The full download is too big for GitHub
+crime.csv
+
+# Python
+__pycache__/
+.ipynb_checkpoints/
+.venv/
+.pytest_cache/
+
+# macOS
+.DS_Store
