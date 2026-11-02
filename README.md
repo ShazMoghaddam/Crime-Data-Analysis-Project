@@ -1,148 +1,116 @@
-# Crime Data Analysis (2020–Present)
+# Did Crime in LA Really Fall?
 
-## Project Summary
+**An analysis of 1,004,894 crime reports from Los Angeles, 2020 to 2024: what they show, and the traps that make them say things that aren't true.**
 
-This project presents an end-to-end data science analysis of reported crime data from 2020 to the present. The objective is to demonstrate practical skills in data cleaning, exploratory data analysis (EDA), visualisation, and machine learning using a real-world, messy dataset.
+[![Checks](https://github.com/ShazMoghaddam/Crime-Data-Analysis-Project/actions/workflows/checks.yml/badge.svg)](https://github.com/ShazMoghaddam/Crime-Data-Analysis-Project/actions/workflows/checks.yml)
+[![Charts: bezel-charts](https://img.shields.io/pypi/v/bezel-charts?label=charts%3A%20bezel-charts&color=16A884)](https://pypi.org/project/bezel-charts/)
+[![MIT licence](https://img.shields.io/badge/licence-MIT-D99A0E)](LICENSE)
 
-The project is designed specifically as a **portfolio piece for junior data analyst / data scientist roles**, focusing on clarity, sound decision-making, and explainability rather than overly complex models.
+Plot this data by year and it looks like crime in Los Angeles collapsed in 2024. It's one of many things in this dataset that aren't what
+they seem. This project separates what the data can show from what's an artefact of how it was recorded and cleaned.
 
----
+<p align="center">
+  <img src="charts/tile-december.svg" width="270" alt="Crimes recorded each month, falling sharply in 2024 to 4,697 in December">
+  <img src="charts/tile-arrests.svg" width="270" alt="Gauge showing 9.4 percent of crimes led to an arrest">
+  <img src="charts/tile-stolen.svg" width="270" alt="Stolen vehicles each year, reaching 24,471 in 2023">
+</p>
 
-## Objectives
-
-* Clean and preprocess raw crime data
-* Explore trends and patterns in crime over time
-* Visualise insights using clear and interpretable charts
-* Build and evaluate a simple machine learning model
-* Communicate findings in a structured and professional manner
-
----
-
-## Dataset
-
-* **Source:** DATA.GOG/Crime data (2020–Present)
-* (https://catalog.data.gov/dataset/crime-data-from-2020-to-present)
-* **Format:** CSV
-* **Content:** Crime records including time-based and categorical attributes
-
-The dataset contains missing values, categorical variables, and temporal information—making it well suited for demonstrating real-world data preparation and analysis skills.
+> **Every chart here is drawn with [bezel-charts](https://pypi.org/project/bezel-charts/), an open-source Python library
+> created by Shaz Moghaddam, the author of this project.** It turns pandas data into clean, self-contained SVG charts.
 
 ---
 
-## Skills Demonstrated
+## Key findings
 
-This project showcases the following skills:
+<!-- key-findings:start -->
+### The 73% fall that isn't one
 
-### Data Handling & Cleaning
+Recorded crimes dropped from 17,394 in February 2024 to **4,697** in December. LAPD changed records systems on 7 March 2024, and
+this dataset stopped being complete. It can't tell you whether crime fell.
 
-* Loading and inspecting large CSV files
-* Handling missing values and duplicates
-* Converting and engineering date/time features
+![Crimes recorded each month, 2023 and 2024](charts/the-cliff.svg)
 
-### Exploratory Data Analysis (EDA)
+### Cleaning deleted the most common crime
 
-* Univariate, bivariate, and temporal analysis
-* Identifying trends and patterns in crime data
-* Translating visual outputs into insights
+Stolen vehicles are the most common crime on record, with 115,184 reports. Dropping rows with blank fields, a common cleaning
+step, left **546**, because those reports have no victim details.
 
-### Data Visualisation
+![Crimes on record before and after the first version's cleaning](charts/cleaning-damage.svg)
 
-* Time series plots to analyse trends over years
-* Bar charts to compare crime categories
-* Clear labelling and presentation-focused visuals
+### Noon is a recording habit as much as a crime peak
 
-### Machine Learning
+Noon has 62,470 crimes against 41,528 an hour later. 39% of all crimes are logged exactly on the hour, which suggests many
+times are estimates.
 
-* Framing a real-world problem as a classification task
-* Feature selection and encoding
-* Train/test split and model evaluation
-* Model interpretation using feature importance
+![Crimes by recorded hour of the day](charts/by-hour.svg)
 
-### Communication & Documentation
+### Most crimes never record an arrest
 
-* Clear markdown structure
-* Commented code for readability
-* Professional, recruiter-friendly explanations
+Only **9.4%** of crimes show an arrest, from 22.8% for aggravated assault to 0.7% for petty theft from vehicle.
 
----
+![Share of crimes with an arrest](charts/arrests.svg)
+<!-- key-findings:end -->
 
-## Machine Learning Approach (Plain English)
+**[Read all seven findings, and what the data can't tell you →](findings/README.md)**
 
-**Problem:** Predict the type of crime based on when it occurred.
-
-**Why this problem?**
-
-* It is realistic and easy to understand
-* It demonstrates classification without unnecessary complexity
-* It focuses on reasoning and interpretation, not just accuracy
-
-**Model Used:** Random Forest Classifier
-
-**Evaluation Metrics Explained Simply:**
-
-* **Accuracy:** How often the model predicts the correct crime type
-* **Precision & Recall:** How well the model handles different crime categories
-* **Confusion Matrix:** Shows where the model gets confused between crime types
-
-The model is not intended for real-world deployment, but rather to demonstrate the full machine learning workflow.
+| # | Finding | |
+|---|---|---|
+| 1 | The 73% fall that isn't one | What happened when LAPD changed records systems |
+| 2 | Cleaning deleted the most common crime | How one common step removed stolen vehicles |
+| 3 | Recorded crime rose before the switch | The four full years, and identity theft's strange jump |
+| 4 | Ten crime types make up most of it | Which crimes, and which police areas |
+| 5 | Noon is a recording habit as much as a crime peak | How much of "when" is an estimate |
+| 6 | Most crimes never record an arrest | How outcomes differ by crime |
+| 7 | Knowing when barely helps predict a crime | A fair test against simply guessing |
 
 ---
 
-## Key Insights
+## Run it yourself
 
-* Crime frequency varies noticeably by year and day of the week
-* A small number of crime categories account for a large proportion of incidents
-* Temporal features alone provide limited predictive power, highlighting the importance of location and contextual data
+You'll need Python 3.11 or newer. The summaries and sample are in the repo, so you don't need the full download.
 
----
+```sh
+git clone https://github.com/ShazMoghaddam/Crime-Data-Analysis-Project.git
+cd Crime-Data-Analysis-Project
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements-dev.txt
 
-## Limitations
+python findings/build.py    # charts and report
+pytest                      # checks the data and the numbers
+```
 
-* Only time-based features were used in the model
-* No geographic or socio-economic variables included
-* Class imbalance may affect prediction quality
-* Results should not be interpreted as actionable law enforcement guidance
+Or open [`notebooks/crime_data_analysis.ipynb`](notebooks/crime_data_analysis.ipynb) for the same analysis with the working shown.
+[`data/prepare.py`](data/prepare.py) explains how to rebuild the data from the full download.
 
----
-
-## Future Work
-
-* Incorporate location-based features
-* Address class imbalance with sampling techniques
-* Experiment with simpler and more advanced models
-* Integrate external datasets (e.g. population or weather data)
-
----
-
-## Repository Structure
+## What's in the repo
 
 ```
 ├── data/
-│   └── Crime_Data_from_2020_to_Present.csv
-├── notebooks/
-│   └── crime_data_analysis.ipynb
-├── README.md
+│   ├── prepare.py            Full download to the small files below
+│   ├── by_*.csv              Exact totals by month, area, time, status and more
+│   ├── crime_sample.csv.gz   200,000 crimes at random, for the model
+│   └── sources.json          Where everything came from
+├── findings/
+│   ├── analysis.py           Every calculation, as small functions
+│   ├── charts.py             Every chart
+│   ├── build.py              Writes the charts and the report
+│   └── README.md             The full report
+├── notebooks/crime_data_analysis.ipynb
+├── charts/                   The SVG charts
+├── tests/                    Checks on the data and the findings
+└── .github/                  Automatic checks and dependency updates
 ```
 
----
+## Data
 
-## How to Run
+The figures come from [Crime Data from 2020 to Present](https://catalog.data.gov/dataset/crime-data-from-2020-to-present), published by the City of
+Los Angeles under a CC0 public domain dedication. LAPD has retired this dataset, so it's kept available for historical reference only. The copy here was
+downloaded in November 2026. Addresses, coordinates, record numbers and victim descent are left out of this repo.
+[`data/sources.json`](data/sources.json) has the details.
 
-1. Clone this repository
-2. Install required dependencies:
-
-   ```
-   pip install pandas numpy matplotlib seaborn scikit-learn
-   ```
-3. Open the notebook:
-
-   ```
-   jupyter notebook
-   ```
-4. Run all cells from top to bottom
+Code and content in this repo are [MIT licensed](LICENSE).
 
 ---
 
-## Final Notes
-
-This project emphasises **clarity, structure, and practical reasoning**—qualities essential for data science roles. The focus is not on building the most complex model, but on demonstrating a complete and well-documented analytical process.
+Created by **Shaz Moghaddam** · London
+[Website](https://shazmoghaddam.github.io) · [LinkedIn](https://www.linkedin.com/in/shazmoghaddam)

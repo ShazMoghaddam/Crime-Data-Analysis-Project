@@ -1,0 +1,11 @@
+{
+  "name": "Crime Data from 2020 to Present",
+  "published_by": "City of Los Angeles, Los Angeles Police Department",
+  "published_at": "https://catalog.data.gov/dataset/crime-data-from-2020-to-present",
+  "download": "https://data.lacity.org/api/v3/views/2nrs-mtv8/export.csv?accessType=DOWNLOAD",
+  "downloaded": "2026-11-02",
+  "licence": "CC0 1.0 Universal (public domain dedication)",
+  "status": "Retired. LAPD moved to a new records system on 7 March 2024 and this dataset is no longer updated.",
+  "replacement": "LAPD NIBRS Offenses and NIBRS Victims datasets, which start on 7 March 2024 and use different definitions",
+  "kept_in_repo": "Summaries and a fixed random sample of 200,000 crimes (seed 42). Addresses, coordinates, record numbers and victim descent are left out."
+}
